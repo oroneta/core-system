@@ -17,6 +17,8 @@ RUN echo "Holaaaa" > ./bin/test.log
 # Production stage
 FROM registry.access.redhat.com/ubi9/ubi:9.3
 
+#RUN apt update
+#RUN apt install -y vim gcc make
 RUN mkdir /opt/csOroneta
 WORKDIR /opt/csOroneta
 
