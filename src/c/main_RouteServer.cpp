@@ -1,50 +1,57 @@
 #include <crow.h>
 #include <iostream>
 
+// Dependencies
+#include "base_ServerComm.h"
+
+
 int main(){
-    //Crear el servidor de Crow
-    crow::SimpleApp droneSystem;
+    //Create Crow Server
+    crow::SimpleApp DroneSystem;
 
-    //Manejar la solicitud POST para verificar la ruta
-    CROW_ROUTE(droneSystem, "/route/<dic>").methods(crow::HTTPMethod::"POST"_method)([&](const crow::request &req, string dic) {
+    //Handle the POST request to verify the route
+    CROW_ROUTE(DroneSystem, "/route/<dic>").methods(crow::HTTPMethod::"POST"_method)([&](const crow::request &req, string dic) {
 
-    //obtener auth-code de la cabecera
-    //get_header_value esta predefinido en crow (http_response.h)
+    //Get auth-code from the header
+    //get_header_value is predefined in crow (http_response.h)
     string authCode = req.get_header_value("Authorization") 
 
-    //si no tiene auth-code se devuelve NO authorizado
+    //If auth-code is missing, return unauthorized
     if(authCode.empty()){
         return crow::response(401,"No autorizado")
     }
 
-    //si el dron no esta registrado en la BBDD devuelve 404(no existe el dron)
-    //falta crear el metodo que comprueba si el dic existe en postgret
+    //If the drone is not registered in the database, return 404 (drone does not exist)
+        //Missing method to check if the record exists in PostgreSQL
     if(!checkDic(dic)){
         return crow::response(404,"No existe el dron")
     } 
 
-    //verificar si el auth-code coincide con el del dron?
+    //Verify if the auth-code matches with the drone's
 
+    if (!checkAuthCode(dic, authCode)) {
+            return crow::response(401, "Auth-code no coincide con el del dron");
+        }
 
-
-    // si existe el dron obtener el cuerpo de la solicitud req
+    // If the drone exists, obtain the request body req
     string requestBody = req.body;
 
-    //comprobar el grado de peligrosidad
+    //Check the level of danger
 
-    //POR AHORA se va a devolver siempre un HTTP 200 para probar el server
+    //g
+
+    //FOR NOW, always return an HTTP 200 to test the server
     json responseJson;
     responseJson["status"] = 1;
     responseJson["dangerous_level"] = 1;
     responseJson["message"] = "Route registered";
 
-    //devulvemos el 
     return crow::response(200, responseJon.dump());
 
     });
 
 
-    //Iniciar el servidor en el puerto 60000
+    //Start the server on port 60000
     app.port(60000).multithreaded().run();
 
 }

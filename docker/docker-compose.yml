@@ -30,6 +30,10 @@ services:
             - oroneta.core-system.postgres
         # network_mode: "host"
 
+        volumes:
+            - ./migration/init.sql:/docker-entrypoint-initdb.d/init.sql      
+      
+
 
 
     oroneta.core-system.adminer:
