@@ -17,6 +17,11 @@ RUN echo "Holaaaa" > ./bin/test.log
 # Production stage
 FROM registry.access.redhat.com/ubi9/ubi:9.3
 
+# Install postgresql library libpqxx
+RUN yum install --nogpgcheck -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-9-x86_64/pgdg-redhat-repo-latest.noarch.rpm && \
+    yum install --nogpgcheck -y postgresql14-14.7 postgresql14-devel-14.7 postgresql14-libs-14.7
+
+
 RUN mkdir /opt/csOroneta
 WORKDIR /opt/csOroneta
 
@@ -32,4 +37,4 @@ RUN ./script/generateAll.sh
 
 
 # tail ./test.log
-CMD ["./script/showTree.sh"]
+CMD ["tail", "-f", "/dev/null"]
