@@ -4,14 +4,24 @@ FROM registry.access.redhat.com/ubi9/ubi:9.3 as builder
 WORKDIR /opt/oronetaBuilder
 
 
-# Esto de aqui abajo es de ejemplo -------
-RUN mkdir ./bin
-RUN echo "Holaaaa" > ./bin/test.log
-# Copias lo que necesites
-# Y haces compile
-# RUN make
-#
-# Recuerda hacer el make que los binarios se copien a una carpeta /opt/oronetaBuilder/bin
+#Install dependecies 
+RUN yum update -y && \
+    yum install -y wget tar && \
+    yum install -y boost boost-devel jsoncpp jsoncpp-devel && \
+    yum install -y vim gcc make
+
+
+# Generate all
+RUN ./script/generateAll.sh
+
+
+WORKDIR /opt/oronetaBuilder/build
+RUN cmake .. && make
+
+# Make y copiar los binarios a /opt/oronetaBuilder/bin
+RUN mkdir -p /opt/oronetaBuilder/bin
+
+
 
 # ---------------------------------------------
 # Production stage
@@ -30,10 +40,6 @@ COPY --from=builder /opt/oronetaBuilder/bin .
 
 # Copy static files
 COPY ./static/ .
-
-# Generate all
-RUN ./script/generateAll.sh
-
 
 
 # tail ./test.log
