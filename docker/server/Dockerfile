@@ -5,10 +5,26 @@ WORKDIR /opt/oronetaBuilder
 
 
 #Install dependecies 
-RUN yum update -y && \
-    yum install -y wget tar && \
-    yum install -y boost boost-devel jsoncpp jsoncpp-devel && \
-    yum install -y vim gcc make
+RUN yum update -y
+RUN yum install -y  \
+        wget        \ 
+        tar         \
+        vim         \
+        g++         \
+        make        \
+        cmake       
+
+
+
+# jsoncpp dependencies
+RUN yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+RUN yum -y install jsoncpp-devel
+# end jsoncpp
+
+# boost dependencies
+RUN yum -y install https://pkgs.sysadmins.ws/el9/base/x86_64/boost1.81-devel-1.81.0-7.el9.x86_64.rpm --skip-broken
+# RUN yum -y install boost1.81-devel
+# end boost
 
 
 # Generate all
@@ -16,7 +32,7 @@ RUN ./script/generateAll.sh
 
 
 WORKDIR /opt/oronetaBuilder/build
-RUN cmake .. && make
+# RUN cmake .. && make
 
 # Make y copiar los binarios a /opt/oronetaBuilder/bin
 RUN mkdir -p /opt/oronetaBuilder/bin
