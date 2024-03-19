@@ -18,7 +18,7 @@ services:
 
     oroneta.core-system.server:
         container_name: oroneta.core-system.server
-        restart: unless-stopped
+        # restart: unless-stopped
         build:
             context: ..
             dockerfile: ./docker/server/Dockerfile

@@ -14,17 +14,17 @@ int main(){
 
     //Get auth-code from the header
     //get_header_value is predefined in crow (http_response.h)
-    string authCode = req.get_header_value("Authorization") 
+    string authCode = req.get_header_value("Authorization");
 
     //If auth-code is missing, return unauthorized
     if(authCode.empty()){
-        return crow::response(401,"No autorizado")
+        return crow::response(401,"No autorizado");
     }
 
     //If the drone is not registered in the database, return 404 (drone does not exist)
         //Missing method to check if the record exists in PostgreSQL
     if(!checkDic(dic)){
-        return crow::response(404,"No existe el dron")
+        return crow::response(404,"No existe el dron");
     } 
 
     //Verify if the auth-code matches with the drone's
