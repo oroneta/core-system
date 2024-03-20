@@ -24,6 +24,7 @@ all: $(TARGET)
 
 # g++ --all
 $(TARGET): $(OBJS)
+	@mkdir -p $(DIST_DIR)
 	$(CC) $(OBJS) -o $(TARGET)
 
 # g++ --code

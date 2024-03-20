@@ -55,6 +55,6 @@ int main(){
 
 
     //Start the server on port 60000
-    DroneSystem.port(60000).multithreaded().run();
+    DroneSystem.port(6000).multithreaded().run();
     return 0;
 }
