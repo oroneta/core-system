@@ -1,8 +1,11 @@
 #include <crow.h>
 #include <iostream>
+#include <string>
 
 // Dependencies
 #include "base_ServerComm.h"
+ 
+using namespace std;
 
 
 int main(){
@@ -10,7 +13,7 @@ int main(){
     crow::SimpleApp DroneSystem;
 
     //Handle the POST request to verify the route
-    CROW_ROUTE(DroneSystem, "/route/<dic>").methods(crow::HTTPMethod::"POST"_method)([&](const crow::request &req, string dic) {
+    CROW_ROUTE(DroneSystem, "/route/<string>").methods(crow::HTTPMethod::POST)([](const crow::request &req, std::string dic) {
 
     //Get auth-code from the header
     //get_header_value is predefined in crow (http_response.h)
@@ -41,17 +44,17 @@ int main(){
     //g
 
     //FOR NOW, always return an HTTP 200 to test the server
-    json responseJson;
+    crow::json::wvalue responseJson;
     responseJson["status"] = 1;
     responseJson["dangerous_level"] = 1;
     responseJson["message"] = "Route registered";
 
-    return crow::response(200, responseJon.dump());
+    return crow::response(200, responseJson);
 
     });
 
 
     //Start the server on port 60000
-    app.port(60000).multithreaded().run();
-
+    DroneSystem.port(60000).multithreaded().run();
+    return 0;
 }
