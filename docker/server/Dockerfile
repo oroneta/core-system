@@ -49,23 +49,21 @@ COPY src .
 RUN make clean
 RUN make
 
-CMD [ "tail", "-f", "/dev/null" ]
 
+#Ejecutar el program
 
 # ---------------------------------------------
 # Production stage
-# FROM registry.access.redhat.com/ubi9/ubi:9.3
+FROM registry.access.redhat.com/ubi9/ubi:9.3
 
+RUN mkdir /opt/csOroneta
+WORKDIR /opt/csOroneta
 
-# RUN mkdir /opt/csOroneta
-# WORKDIR /opt/csOroneta
+# Copy all files from the builder stage
+COPY --from=builder /opt/oronetaBuilder/dist ./bin
 
-# # Copy all files from the builder stage
-# # COPY --from=builder /opt/oronetaBuilder/dist .
+# Copy static files
+COPY ./static/ .
 
-# # Copy static files
-# COPY ./static/ .
-
-
-# # tail ./test.log
-# CMD ["tail", "-f", "/dev/null"]
+# tail ./test.log
+CMD ["./bin/OronetaCoreServer"]

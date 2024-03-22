@@ -44,7 +44,7 @@ int main(){
     //g
 
     //FOR NOW, always return an HTTP 200 to test the server
-    crow::json::wvalue responseJson;
+     crow::json::wvalue responseJson;
     responseJson["status"] = 1;
     responseJson["dangerous_level"] = 1;
     responseJson["message"] = "Route registered";
