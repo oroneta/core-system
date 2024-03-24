@@ -16,6 +16,10 @@ RUN yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.n
 RUN yum -y install jsoncpp-devel
 # end jsoncpp
 
+# Install postgresql library libpqxx
+RUN yum install --nogpgcheck -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-9-x86_64/pgdg-redhat-repo-latest.noarch.rpm && \
+    yum install --nogpgcheck -y postgresql14-14.7 postgresql14-devel-14.7 postgresql14-libs-14.7
+
 # asio dependencies
 RUN yum -y install asio-devel
 # end asio
@@ -55,10 +59,6 @@ CMD [ "tail", "-f", "/dev/null" ]
 # ---------------------------------------------
 # Production stage
 FROM registry.access.redhat.com/ubi9/ubi:9.3
-
-# Install postgresql library libpqxx
-RUN yum install --nogpgcheck -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-9-x86_64/pgdg-redhat-repo-latest.noarch.rpm && \
-    yum install --nogpgcheck -y postgresql14-14.7 postgresql14-devel-14.7 postgresql14-libs-14.7
 
 
 
