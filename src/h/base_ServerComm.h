@@ -10,6 +10,6 @@ bool checkAuthCode(const std::string& dic, const std::string& authCode);
 
 void insert(const std::string& dic , const std::string& ReqBody);
 
-
+bool checkCoord(float latitude, float longitude);
 
 #endif 
