@@ -72,11 +72,10 @@ int main(){
                     return crow::response(200, responseJson); 
                 }
             }
-
         }
 
         //Insert drone data and coordinates
-        insert(dic,CoordData);
+        insert(dic,requestBody);
         //Collisions<MAX_COLLISION=route safe
         crow::json::wvalue responseJson;
         responseJson["status"] = 1;
