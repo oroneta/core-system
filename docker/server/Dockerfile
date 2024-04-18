@@ -18,7 +18,8 @@ RUN yum -y install jsoncpp-devel
 
 # Install postgresql library libpqxx
 RUN yum install --nogpgcheck -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-9-x86_64/pgdg-redhat-repo-latest.noarch.rpm && \
-    yum install --nogpgcheck -y postgresql14-14.7 postgresql14-devel-14.7 postgresql14-libs-14.7
+    yum install --nogpgcheck --skip-broken -y postgresql14-14.7 postgresql14-devel-14.7 postgresql14-libs-14.7 postgresql-devel
+    #  libpqxx-devel postgresql-devel
 
 # asio dependencies
 RUN yum -y install asio-devel
@@ -28,6 +29,19 @@ RUN yum -y install asio-devel
 # RUN yum -y install https://pkgs.sysadmins.ws/el9/base/x86_64/boost1.81-devel-1.81.0-7.el9.x86_64.rpm --skip-broken
 # RUN yum -y install boost1.81-devel
 # end boost
+
+WORKDIR /opt/oronetaBuilder/
+
+# Download libpqxx
+RUN wget https://github.com/jtv/libpqxx/archive/refs/tags/7.9.0.tar.gz -O Libpqxx.tar.gz
+# Create directory for pqxx
+RUN mkdir -p libpqxx
+# Extract Crow
+RUN tar xvfz Libpqxx.tar.gz -C libpqxx --strip-components=1
+
+WORKDIR /opt/oronetaBuilder/libpqxx
+RUN ./configure --disable-shared
+RUN make && make install
 
 WORKDIR /opt/oronetaBuilder/
 
@@ -51,7 +65,11 @@ WORKDIR /opt/oronetaBuilder/src
 COPY src .
 # Build
 RUN make clean
+
+RUN g++ --version
 RUN make
+
+# CMD ["sleep", "10000000000000000"]
 
 
 #Ejecutar el program
@@ -66,10 +84,10 @@ RUN yum install --nogpgcheck -y https://download.postgresql.org/pub/repos/yum/re
 RUN mkdir /opt/csOroneta
 WORKDIR /opt/csOroneta
 
-# Copy all files from the builder stage
+# COPY all files from the builder stage
 COPY --from=builder /opt/oronetaBuilder/dist ./bin
 
-# Copy static files
+# COPY static files
 COPY ./static/ .
 
 

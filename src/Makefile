@@ -3,7 +3,8 @@
 # Directories
 SRC_DIR = c
 INC_DIR = -Ih
-LIB_DIR = -lpthread
+LINK_DIR = -L/usr/pqsql-14/lib -L/usr/lib64
+LIB_DIR = -lpthread -lpqs -lpqxx
 BUILD_DIR = ../build
 DIST_DIR = ../dist
 PROJECT_NAME = OronetaCoreServer
@@ -17,7 +18,7 @@ TARGET = $(DIST_DIR)/$(PROJECT_NAME)
 
 # Compiler and options flag "no warning"
 CC = g++
-CFLAGS = $(INC_DIR) $(LIB_DIR)
+CFLAGS = $(INC_DIR) $(LINK_DIR) $(LIB_DIR)
 
 # Main executable program
 all: $(TARGET)

@@ -3,8 +3,18 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <string>
 #include <pqxx/pqxx>
 
-void DB_connection(const string& ip, int port, const string& user, const string& password);
+pqxx::connection DB_connection(const char* ip, int port, const char* user, const char* password);
+
+
+// bool checkDic(const std::string& dic);
+
+// bool checkAuthCode(const std::string& dic, const std::string& authCode);
+
+// void insert(const std::string& dic , const std::string& ReqBody);
+
+// bool checkCoord(float latitude, float longitude);
 
 #endif
