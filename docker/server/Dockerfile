@@ -9,7 +9,8 @@ RUN yum install -y  \
         vim         \
         g++         \
         make        \
-        cmake       
+        cmake       \
+        openssl-devel
 
 # jsoncpp dependencies
 RUN yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
@@ -18,11 +19,14 @@ RUN yum -y install jsoncpp-devel
 
 # Install postgresql library libpqxx
 RUN yum install --nogpgcheck -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-9-x86_64/pgdg-redhat-repo-latest.noarch.rpm && \
-    yum install --nogpgcheck --skip-broken -y postgresql14-14.7 postgresql14-devel-14.7 postgresql14-libs-14.7 postgresql-devel
+# to use -lpq
+    # yum install --nogpgcheck --skip-broken -y libpq-devel postgresql-devel
+    yum install --nogpgcheck --skip-broken -y postgresql14-14.7 postgresql14-devel-14.7 postgresql14-libs-14.7
     #  libpqxx-devel postgresql-devel
 
-# asio dependencies
-RUN yum -y install asio-devel
+# asio & libpqxx dependencies
+RUN yum -y install --nogpgcheck asio-devel
+
 # end asio
 
 # boost dependencies
@@ -33,14 +37,14 @@ RUN yum -y install asio-devel
 WORKDIR /opt/oronetaBuilder/
 
 # Download libpqxx
-RUN wget https://github.com/jtv/libpqxx/archive/refs/tags/7.9.0.tar.gz -O Libpqxx.tar.gz
+RUN wget https://github.com/jtv/libpqxx/archive/refs/tags/7.6.1.tar.gz -O Libpqxx.tar.gz
 # Create directory for pqxx
 RUN mkdir -p libpqxx
-# Extract Crow
+# Extract libpqxx
 RUN tar xvfz Libpqxx.tar.gz -C libpqxx --strip-components=1
 
 WORKDIR /opt/oronetaBuilder/libpqxx
-RUN ./configure --disable-shared
+RUN ./configure --with-postgres-lib=/usr/pgsql-14/lib --with-postgres-include=/usr/pgsql-14/include --build=aarch64-unknown-linux-gnu
 RUN make && make install
 
 WORKDIR /opt/oronetaBuilder/
@@ -65,8 +69,6 @@ WORKDIR /opt/oronetaBuilder/src
 COPY src .
 # Build
 RUN make clean
-
-RUN g++ --version
 RUN make
 
 # CMD ["sleep", "10000000000000000"]
@@ -76,20 +78,20 @@ RUN make
 
 # ---------------------------------------------
 # Production stage
-FROM registry.access.redhat.com/ubi9/ubi:9.3
+# FROM registry.access.redhat.com/ubi9/ubi:9.3
 
-RUN yum install --nogpgcheck -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-9-x86_64/pgdg-redhat-repo-latest.noarch.rpm && \
-    yum install --nogpgcheck -y postgresql14-14.7 postgresql14-devel-14.7 postgresql14-libs-14.7
+# RUN yum install --nogpgcheck -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-9-x86_64/pgdg-redhat-repo-latest.noarch.rpm && \
+#     yum install --nogpgcheck -y postgresql14-14.7 postgresql14-devel-14.7 postgresql14-libs-14.7
 
-RUN mkdir /opt/csOroneta
-WORKDIR /opt/csOroneta
+# RUN mkdir /opt/csOroneta
+# WORKDIR /opt/csOroneta
 
-# COPY all files from the builder stage
-COPY --from=builder /opt/oronetaBuilder/dist ./bin
+# # COPY all files from the builder stage
+# COPY --from=builder /opt/oronetaBuilder/dist ./bin
 
-# COPY static files
-COPY ./static/ .
+# # COPY static files
+# COPY ./static/ .
 
 
-# tail ./test.log
-CMD ["./bin/OronetaCoreServer"]
+# # tail ./test.log
+# CMD ["./bin/OronetaCoreServer"]
