@@ -25,8 +25,8 @@ RUN yum install --nogpgcheck -y https://download.postgresql.org/pub/repos/yum/re
     yum install --nogpgcheck --skip-broken -y postgresql14-14.7 postgresql14-devel-14.7 postgresql14-libs-14.7
     #  libpqxx-devel postgresql-devel
 
-# asio & libpqxx dependencies
-RUN yum -y install --nogpgcheck asio-devel libpqxx libpqxx-devel
+# asio
+RUN yum -y install --nogpgcheck asio-devel
 
 # end asio
 
@@ -34,19 +34,6 @@ RUN yum -y install --nogpgcheck asio-devel libpqxx libpqxx-devel
 # RUN yum -y install https://pkgs.sysadmins.ws/el9/base/x86_64/boost1.81-devel-1.81.0-7.el9.x86_64.rpm --skip-broken
 # RUN yum -y install boost1.81-devel
 # end boost
-
-# WORKDIR /opt/oronetaBuilder/
-
-# # Download libpqxx
-# RUN wget https://github.com/jtv/libpqxx/archive/refs/tags/7.9.0.tar.gz -O Libpqxx.tar.gz
-# # Create directory for pqxx
-# RUN mkdir -p libpqxx
-# # Extract libpqxx
-# RUN tar xvfz Libpqxx.tar.gz -C libpqxx --strip-components=1
-
-# WORKDIR /opt/oronetaBuilder/libpqxx
-# RUN ./configure --with-postgres-lib=/usr/pgsql-14/lib --with-postgres-include=/usr/pgsql-14/include --build=aarch64-unknown-linux-gnu CXXFLAGS=-std=c++20
-# RUN make CXXFLAGS=-std=c++20 && make install
 
 WORKDIR /opt/oronetaBuilder/
 
@@ -72,27 +59,26 @@ COPY src .
 RUN make clean
 RUN make
 
-# CMD ["sleep", "10000000000000000"]
 
 
 #Ejecutar el program
 
 # ---------------------------------------------
 # Production stage
-# FROM registry.access.redhat.com/ubi9/ubi:9.3
+FROM registry.access.redhat.com/ubi9/ubi:9.3
 
-# RUN yum install --nogpgcheck -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-9-x86_64/pgdg-redhat-repo-latest.noarch.rpm && \
-#     yum install --nogpgcheck -y postgresql14-14.7 postgresql14-devel-14.7 postgresql14-libs-14.7
+RUN yum install --nogpgcheck -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-9-x86_64/pgdg-redhat-repo-latest.noarch.rpm && \
+    yum install --nogpgcheck -y postgresql14-14.7 postgresql14-devel-14.7 postgresql14-libs-14.7
 
-# RUN mkdir /opt/csOroneta
-# WORKDIR /opt/csOroneta
+RUN mkdir /opt/csOroneta
+WORKDIR /opt/csOroneta
 
-# # COPY all files from the builder stage
-# COPY --from=builder /opt/oronetaBuilder/dist ./bin
+# COPY all files from the builder stage
+COPY --from=builder /opt/oronetaBuilder/dist ./bin
 
-# # COPY static files
-# COPY ./static/ .
+# COPY static files
+COPY ./static/ .
 
 
-# # tail ./test.log
-# CMD ["./bin/OronetaCoreServer"]
+# tail ./test.log
+CMD ["./bin/OronetaCoreServer"]

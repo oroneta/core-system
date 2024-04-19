@@ -4,7 +4,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
-#include <pqxx/pqxx>
+#include <libpq-fe.h>
 
 pqxx::connection DB_connection(const char* ip, int port, const char* user, const char* password);
 

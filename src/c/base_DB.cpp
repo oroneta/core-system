@@ -1,9 +1,7 @@
-#define _GLIBCXX_USE_CXX11_ABI 0
-
 #include <iostream>
 #include <cstdlib>
 #include <string>
-#include <pqxx/pqxx>
+#include <libpq-fe.h>
 
 
 using namespace std;

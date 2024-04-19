@@ -2,11 +2,9 @@
 
 # Directories
 SRC_DIR = c
-# INC_DIR = -Ih -I/usr/pgsql-14/include/ -I/usr/local/include/
-# LINK_DIR = -L/usr/pgsql-14/lib/ -L/usr/local/lib/
-INC_DIR = -Ih -I/usr/pgsql-14/include/ -I/usr/include/
-LINK_DIR = -L/usr/pgsql-14/lib/ -L/usr/lib64/
-LIB_DIR = -lpqxx -lpq -lpthread 
+INC_DIR = -Ih -I/usr/pgsql-14/include/
+LINK_DIR = -L/usr/pgsql-14/lib/
+LIB_DIR = -lpq -lpthread 
 BUILD_DIR = ../build
 DIST_DIR = ../dist
 PROJECT_NAME = OronetaCoreServer
