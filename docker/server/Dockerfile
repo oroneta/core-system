@@ -3,11 +3,12 @@ FROM registry.access.redhat.com/ubi9/ubi:9.3 as builder
 
 #Install dependecies 
 RUN yum update -y
+RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
 RUN yum install -y  \
         wget        \ 
         tar         \
         vim         \
-        g++         \
+        gcc-c++     \
         make        \
         cmake       \
         openssl-devel
@@ -25,7 +26,7 @@ RUN yum install --nogpgcheck -y https://download.postgresql.org/pub/repos/yum/re
     #  libpqxx-devel postgresql-devel
 
 # asio & libpqxx dependencies
-RUN yum -y install --nogpgcheck asio-devel
+RUN yum -y install --nogpgcheck asio-devel libpqxx libpqxx-devel
 
 # end asio
 
@@ -34,18 +35,18 @@ RUN yum -y install --nogpgcheck asio-devel
 # RUN yum -y install boost1.81-devel
 # end boost
 
-WORKDIR /opt/oronetaBuilder/
+# WORKDIR /opt/oronetaBuilder/
 
-# Download libpqxx
-RUN wget https://github.com/jtv/libpqxx/archive/refs/tags/7.6.1.tar.gz -O Libpqxx.tar.gz
-# Create directory for pqxx
-RUN mkdir -p libpqxx
-# Extract libpqxx
-RUN tar xvfz Libpqxx.tar.gz -C libpqxx --strip-components=1
+# # Download libpqxx
+# RUN wget https://github.com/jtv/libpqxx/archive/refs/tags/7.9.0.tar.gz -O Libpqxx.tar.gz
+# # Create directory for pqxx
+# RUN mkdir -p libpqxx
+# # Extract libpqxx
+# RUN tar xvfz Libpqxx.tar.gz -C libpqxx --strip-components=1
 
-WORKDIR /opt/oronetaBuilder/libpqxx
-RUN ./configure --with-postgres-lib=/usr/pgsql-14/lib --with-postgres-include=/usr/pgsql-14/include --build=aarch64-unknown-linux-gnu
-RUN make && make install
+# WORKDIR /opt/oronetaBuilder/libpqxx
+# RUN ./configure --with-postgres-lib=/usr/pgsql-14/lib --with-postgres-include=/usr/pgsql-14/include --build=aarch64-unknown-linux-gnu CXXFLAGS=-std=c++20
+# RUN make CXXFLAGS=-std=c++20 && make install
 
 WORKDIR /opt/oronetaBuilder/
 

@@ -2,9 +2,11 @@
 
 # Directories
 SRC_DIR = c
-INC_DIR = -Ih -I/usr/pgsql-14/include/ -I/usr/local/include/
-LINK_DIR = -L/usr/pgsql-14/lib/ -L/usr/local/lib/
-LIB_DIR = -lpthread -lpqxx -lpq
+# INC_DIR = -Ih -I/usr/pgsql-14/include/ -I/usr/local/include/
+# LINK_DIR = -L/usr/pgsql-14/lib/ -L/usr/local/lib/
+INC_DIR = -Ih -I/usr/pgsql-14/include/ -I/usr/include/
+LINK_DIR = -L/usr/pgsql-14/lib/ -L/usr/lib64/
+LIB_DIR = -lpqxx -lpq -lpthread 
 BUILD_DIR = ../build
 DIST_DIR = ../dist
 PROJECT_NAME = OronetaCoreServer
@@ -17,9 +19,7 @@ OBJS = $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SRCS))
 TARGET = $(DIST_DIR)/$(PROJECT_NAME)
 
 # Compiler and options flag "no warning"
-CC = g++ 
-# C++ 17
-GXXFLAGS = -std=c++17
+CC = g++
 CFLAGS = $(INC_DIR) $(LINK_DIR) $(LIB_DIR)
 
 # Main executable program
