@@ -1,7 +1,7 @@
 #include <crow.h>
 #include <iostream>
 #include <string>
-#include <pqxx/pqxx>
+
 // Dependencies
 // #include "base_ServerComm.h"
 #include "base_DB.h"
