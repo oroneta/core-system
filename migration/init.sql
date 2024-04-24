@@ -2,7 +2,7 @@
 CREATE TABLE routes (
     dic VARCHAR PRIMARY KEY,
     auth_code VARCHAR,
-    flight BYTEA
+    flight JSON
 );
 
 CREATE TABLE registrants (

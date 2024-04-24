@@ -1,67 +1,55 @@
-#include <iostream>
+#include <stdio.h>
 #include <cstdlib>
-#include <string>
 #include <libpq-fe.h>
+#include <cstring>
 
+#include "base_DB.h"
 
 using namespace std;
 
-pqxx::connection DB_connection(const char* ip, int port, const char* user, const char* password) {
-    pqxx::connection C;
-    try {
-        // char* dbname = "core-system.postgres";
-        // string conn_str = "dbname = " +  dbname +  " user = " + user + 
-        //                         " password = " + password + " hostaddr = " + ip + 
-        //                         " port = " + to_string(port);
-        string conn_str = "dbname=core-system.postgres user=Oroneta_Admin password=Oroneta_Password hostaddr=127.0.0.1 port=5432";
-        C = pqxx::connection(conn_str);
-        
-        if (C.is_open()) {
-            cout << "Opened database successfully" << endl;
-        } else {
-            cout << "Can't open database" << endl;
-        }
-    } catch (const std::exception &e) {
-        cerr << e.what() << endl;
+void do_exit(PGconn *conn) {
+    PQfinish(conn);
+    exit(1);
+}
+
+PGconn* DB_connection(const char* user, const char* password) {
+
+    char conninfo[1024];
+    // memset(conninfo, '\0', sizeof(conninfo));
+    snprintf(conninfo, sizeof(conninfo), "host=oroneta.core-system.postgres port=5432 dbname=core-system.postgres user=%s password=%s", user, password);
+
+    PGconn *conn = PQconnectdb(conninfo);
+
+    if (PQstatus(conn) !=  CONNECTION_OK) {
+        fprintf(stderr, "Connection to database failed: %s\n", PQerrorMessage(conn));
+    } else {
+        printf("Connection to database done successfully \n");
     }
-    return C;
+
+    return conn;
 }
 
 //check if drone dic exist in postgres
-bool checkDic(const std::string& dic) {
-    
-    // return true if dic exists in DB
-    
-    return true;
-}
+bool checkDic(PGconn* conn, char* dic) {
+    if (PQstatus(conn) == CONNECTION_OK) {
+        char query[256];
+        PGresult* result;
 
-//check if dic and auth-code match
-bool checkAuthCode(const std::string& dic, const std::string& authCode) {
-   return true;
-}
+        snprintf(query, sizeof(query), "SELECT EXISTS (SELECT 1 FROM drones WHERE dic = '%s')", dic);
 
-//insert route
-void insert(const std::string& dic, const std::string& ReqBody){
+        result = PQexec(conn, query);
 
-    try
-    {
-        
+        if (PQresultStatus(result) != PGRES_TUPLES_OK) {
+            printf("Error executing query: %s\n", PQerrorMessage(conn));
+            PQclear(result);
+        }
+
+        if (strcmp(PQgetvalue(result, 0, 0), "t") == 0) {
+            printf("Existe\n");
+            PQclear(result);
+            return true;
+        }
+        printf("No existe\n");
     }
-    catch(const std::exception& e)
-    {
-        
-    }
-    
-}
-
-// check if route exists
-
-/*
-comprobar si existen coordenadas en la bbdd
-sera un metodo tipo check(latitude,longitude), que son 2 floats
-*/
-
-bool checkCoordinates(float latitude, float longitude) {
-
     return false;
 }

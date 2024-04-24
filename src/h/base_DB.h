@@ -1,20 +1,13 @@
 #ifndef _BaseDB_H_
 #define _BaseDB_H_
 
-#include <iostream>
+#include <stdio.h>
 #include <cstdlib>
-#include <string>
 #include <libpq-fe.h>
+#include <cstring>
 
-pqxx::connection DB_connection(const char* ip, int port, const char* user, const char* password);
 
-
-// bool checkDic(const std::string& dic);
-
-// bool checkAuthCode(const std::string& dic, const std::string& authCode);
-
-// void insert(const std::string& dic , const std::string& ReqBody);
-
-// bool checkCoord(float latitude, float longitude);
+PGconn* DB_connection(const char* user, const char* password);
+bool checkDic(PGconn* conn, char* dic);
 
 #endif
