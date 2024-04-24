@@ -60,6 +60,6 @@ int main(){
     // //Start the server on port 60000
     // DroneSystem.port(6000).multithreaded().run();
 
-    DB_connection("127.0.0.1", 5432, "Oroneta_Admin", "Oroneta_Password");
+    DB_connection("Oroneta_Admin", "Oroneta_Password");
     return 0;
 }
