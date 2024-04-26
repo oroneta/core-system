@@ -18,7 +18,7 @@ services:
 
     oroneta.core-system.server:
         container_name: oroneta.core-system.server
-        restart: unless-stopped
+        # restart: unless-stopped
         build:
             context: ..
             dockerfile: ./docker/server/Dockerfile
@@ -29,6 +29,10 @@ services:
         depends_on:
             - oroneta.core-system.postgres
         # network_mode: "host"
+
+        volumes:
+            - ./migration/init.sql:/docker-entrypoint-initdb.d/init.sql      
+      
 
 
 

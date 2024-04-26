@@ -2,32 +2,36 @@
 
 # Directories
 SRC_DIR = c
-INC_DIR = h
+INC_DIR = -Ih -I/usr/pgsql-14/include/
+LINK_DIR = -L/usr/pgsql-14/lib/
+LIB_DIR = -lpq -lpthread 
 BUILD_DIR = ../build
 DIST_DIR = ../dist
-PROJECT_NAME = main
+PROJECT_NAME = OronetaCoreServer
 
 # Source code and object
-SRCS = $(wildcard $(SRC_DIR)/*.c)
-OBJS = $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
+SRCS = $(wildcard $(SRC_DIR)/*.cpp)
+OBJS = $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SRCS))
 
 # Name of project
 TARGET = $(DIST_DIR)/$(PROJECT_NAME)
 
 # Compiler and options flag "no warning"
-CC = gcc
-CFLAGS = -I$(INC_DIR)
+CC = g++
+CFLAGS = $(INC_DIR) $(LINK_DIR) $(LIB_DIR)
 
 # Main executable program
 all: $(TARGET)
 
-# gcc --all
+# g++ --all
 $(TARGET): $(OBJS)
-	$(CC) $(OBJS) -o $(TARGET)
+	@mkdir -p $(DIST_DIR)
+	$(CC) $(CFLAGS) $(OBJS) -o $(TARGET)
 
-# gcc --code
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CC) -c $< -o $@ $(CFLAGS)
+# g++ --code
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
+	@mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 # Regla para limpiar
 clean:
