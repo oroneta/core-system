@@ -35,7 +35,11 @@ jobs:
         cd ./docker
         docker compose up -d --build
 
-        if [[ $( docker ps -q | wc -l ) -lt 1 ]];then; echo "Test failed, docker not alive"; exit 1;fi;
+        if [ $( docker ps -q | wc -l ) -lt 3 ]
+        then
+          echo "Test failed, docker not alive"
+          exit 1
+        fi
 
 
     - name: Test docker container
