@@ -62,30 +62,38 @@ int main(){
         }
 
         int collisionsCount = 0;
-        //Iterate over Coordinates
+        
+        auto coordsArray = CoordData["coord"];
 
-        // Convertir rvalue a wvalue
-crow::json::wvalue coordsWvalue(CoordData["coord"]);
+        //manual conversion json to string
+        std::ostringstream os;  
+        os << "[";
+        for (size_t i = 0; i < coordsArray.size(); ++i) {
+            os << "[" << coordsArray[i][0].d() << "," << coordsArray[i][1].d() << "]";
+            if (i < coordsArray.size() - 1) {
+                os << ",";
+            }
+        }
+        os << "]";
 
-// Serializar wvalue a string (si dump está disponible en wvalue)
-// std::string coordsString = crow::json::dump(coordsWvalue);
-  
-//         //     //check collisions
-//             if(checkColissions(conn, dic.c_str(), coordsString.c_str())){
-//                 collisionsCount++;
+        std::string coordsString = os.str();
 
-//                 if(collisionsCount > MAX_COLLISION) {
-//                     crow::json::wvalue responseJson;
-//                     responseJson["status"] = 0;
-//                     responseJson["message"] = "Route is very dangerous to be used";
-//                     return crow::response(200, responseJson);
-//                 }
-//             }
+
+        //check collisions
+        if(checkColissions(conn, dic.c_str(), coordsString.c_str())){
+            collisionsCount++;
+
+            if(collisionsCount > MAX_COLLISION) {
+                crow::json::wvalue responseJson;
+                responseJson["status"] = 0;
+                responseJson["message"] = "Route is very dangerous to be used";
+                return crow::response(200, responseJson);
+            }
+        }
 
 
         //Insert drone data and coordinates
-        // insertRoute(conn, dic.c_str(),authCode.c_str(), coordsString);
-        //Collisions<MAX_COLLISION=route safe
+        insertRoute(conn, dic.c_str(),authCode.c_str(), coordsString.c_str());
         crow::json::wvalue responseJson;
         responseJson["status"] = 1;
         //responseJson["dangerous_level"] = 1;
