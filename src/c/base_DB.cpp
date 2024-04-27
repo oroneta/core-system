@@ -30,7 +30,7 @@ PGconn* DB_connection(const char* user, const char* password) {
 }
 
 //check if drone dic exist in postgres
-bool checkDic(PGconn* conn, char* dic) {
+bool checkDic(PGconn* conn, const char* dic) {
     if (PQstatus(conn) == CONNECTION_OK) {
         char query[256];
         PGresult* result;
@@ -55,7 +55,7 @@ bool checkDic(PGconn* conn, char* dic) {
 }
 
 // insert route
-void insertRoute(PGconn* conn, char* dic, char* auth_code, char* route) {
+void insertRoute(PGconn* conn, const char* dic, const char* auth_code, const char* route) {
     if (PQstatus(conn) == CONNECTION_OK) {
         char query[256];
         snprintf(query, sizeof(query), "INSERT INTO routes (dic, auth_code, flight) VALUES ('%s', '%s', '%s')", dic, auth_code, route);
@@ -67,12 +67,12 @@ void insertRoute(PGconn* conn, char* dic, char* auth_code, char* route) {
 }
 
 // check if dic and auth-code match
-bool checkAuthCode(PGconn* conn, char* dic, char* authCode) {
+bool checkAuthCode(PGconn* conn, const char* dic, const char* authCode) {
     if (PQstatus(conn) == CONNECTION_OK) {
         char query[256];
          PGresult* result;
 
-        snprintf(query, sizeof(query), "SELECT EXISTS (SELECT 1 FROM drones WHERE dic = '%s' AND authCode = '%s)", dic, authCode);
+        snprintf(query, sizeof(query), "SELECT EXISTS (SELECT 1 FROM drones WHERE dic = '%s' AND auth_Code = '%s')", dic, authCode);
 
         result = PQexec(conn, query);
 
@@ -89,11 +89,11 @@ bool checkAuthCode(PGconn* conn, char* dic, char* authCode) {
         printf("No coincide\n");
         
     }
-   return true;
+   return false;
 }
 
 // check colissions route
-int checkColissions(PGconn* conn, char* dic, char* route) {
+int checkColissions(PGconn* conn, const char* dic, const char* route) {
     if (PQstatus(conn) == CONNECTION_OK) {
         char query[256];
         PGresult* result;
@@ -116,4 +116,7 @@ int checkColissions(PGconn* conn, char* dic, char* route) {
         int count = atoi(PQgetvalue(result, 0, 0));
         return count;
     }
+    return -1;
+    printf("Error: No se pudo establecer la conexión.\n");
+    
 }

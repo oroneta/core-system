@@ -8,7 +8,8 @@ services:
         ports:
             - 5432:5432
         volumes:
-            - postgres:/var/lib/postgresql/data
+            # - postgres:/var/lib/postgresql/data
+            - ../migration/init.sql:/docker-entrypoint-initdb.d/init.sql    
         environment:
             POSTGRES_PASSWORD: ${PG_DBPASS}
             POSTGRES_USER: ${PG_DBUSER}
@@ -25,13 +26,11 @@ services:
         env_file:
             - .env
         ports:
-            - 6000:6000
+            - 60000:60000
         depends_on:
             - oroneta.core-system.postgres
         # network_mode: "host"
 
-        volumes:
-            - ./migration/init.sql:/docker-entrypoint-initdb.d/init.sql      
       
 
 
@@ -50,4 +49,5 @@ services:
 
 
 volumes:
-    postgres:
+    postgres:             
+      
