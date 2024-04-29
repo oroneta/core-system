@@ -44,9 +44,9 @@ jobs:
 
     - name: Test docker container
       run: |
-        cd ../test
+        cd ./test
 
-        python3 -m pip install -r requirements.txt
+        python3 -m pip install -r requeriments.txt
 
         python3 pytester.py 2
         python3 pytester.py 1
