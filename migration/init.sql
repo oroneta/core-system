@@ -39,8 +39,31 @@ FOREIGN KEY (dic) REFERENCES drones(dic);
 
 --Create some fictitious datas for testing
 
--- INSERT to registrants
+-- Insert registrants
+INSERT INTO registrants (id, name, country) VALUES
+('ZLL', 'Zheng Lin Lei', 'Unknown'),
+('EC', 'Elena Clofent', 'Unknown'),
+('ZL', 'Zhi Lin Lo', 'Unknown' ),
+('MZ', 'Maria Zapata', 'Unknown'),
+('HW', 'Haitao Wu', 'Unknown');
 
--- INSERT to drones
+-- Insert drones with references to the registrants
+INSERT INTO drones (dic, auth_code, registrants, owner_name, owner_identify, owner_email, registered_at) VALUES
+('ESP00001-123-0033', '0', 'ZLL', 'Zheng Lin Lei', 'Unknown', 'llzheng@oroneta.com', CURRENT_TIMESTAMP),
+('ESP00002-123-0033', '1', 'ZL', 'Zhi Lin Lo', 'Unknown', 'zli@oroneta.com', CURRENT_TIMESTAMP),
+('ESP00003-123-0033', '2', 'EC', 'Elena Clofent', 'Unknown', 'eclemuo@oroneta.com', CURRENT_TIMESTAMP);
 
--- INSERT to routes
+-- ('AUS78825-778-0001', '3', 'MZ', 'Maria Zapata', 'Unknown', 'mzapale@oroneta.com', CURRENT_TIMESTAMP),
+-- ('ESP88712-998-0871', '4', 'HW', 'Haitao Wu', 'Unknown', 'hwu@oroneta.com', CURRENT_TIMESTAMP);
+
+
+-- INSERT to routes for testing
+
+-- INSERT INTO routes (dic, auth_code, flight) VALUES
+-- ('ESP00001-123-0033', '0', '[[21,32], [4,-117], [40,-74], [36,-122], [30,-97]]'),
+-- ('ESP00002-123-0033', '1', '[[52,-0.13], [40,-3.68], [41,29], [38,-9], [55,-3]]'),
+-- ('ESP00003-123-0033', '2', '[[48,2], [50,14], [45,9], [52,13], [60,24]]');
+-- ('AUS78825-778-0001', '3', '[[33.86,151.21], [-37.81,144.96], [-31.95,115.86], [-27.47,153.03], [-42.88,147.33]]'),
+-- ('ESP88712-998-0871', '4', '[[35.68,139.69], [22.32,114.17], [1.35,103.82], [13.75,100.51], [37.57,126.98]]');
+
+

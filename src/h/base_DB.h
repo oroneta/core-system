@@ -9,12 +9,12 @@
 
 PGconn* DB_connection(const char* user, const char* password);
 
-bool checkDic(PGconn* conn, char* dic);
+bool checkDic(PGconn* conn, const char* dic);
 
-void insertRoute(PGconn* conn, char* dic, char* auth_code, char* route);
+void insertRoute(PGconn* conn, const char* dic, const char* auth_code, const char* route);
 
-bool checkAuthCode(PGconn* conn, char* dic, char* authCode);
+bool checkAuthCode(PGconn* conn, const char* dic, const char* authCode);
 
-int checkColissions(PGconn* conn, char* dic, char* route);
+int checkColissions(PGconn* conn, const char* dic, const char* route);
 
 #endif

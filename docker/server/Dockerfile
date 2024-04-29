@@ -49,6 +49,8 @@ WORKDIR /opt/oronetaBuilder/crow/build
 RUN cmake .. -DCROW_BUILD_EXAMPLES=OFF -DCROW_BUILD_TESTS=OFF
 RUN make install
 
+# # Descargar y copiar nlohmann/json
+# RUN wget https://github.com/nlohmann/json/releases/download/v3.10.2/json.hpp -O /usr/local/include/json.hpp
 
 # MAKE PROJECT
 WORKDIR /opt/oronetaBuilder/src
