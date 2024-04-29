@@ -66,30 +66,31 @@ int main(){
         auto coordsArray = CoordData["coord"];
 
         //manual conversion json to string
-        std::ostringstream os;  
+        ostringstream os;  
         os << "[";
         for (size_t i = 0; i < coordsArray.size(); ++i) {
             os << "[" << coordsArray[i][0].d() << "," << coordsArray[i][1].d() << "]";
             if (i < coordsArray.size() - 1) {
-                os << ",";
+                os << ", ";
             }
         }
         os << "]";
 
-        std::string coordsString = os.str();
+        string coordsString = os.str();
 
 
         //check collisions
         if(checkColissions(conn, dic.c_str(), coordsString.c_str())){
             collisionsCount++;
-
-            if(collisionsCount > MAX_COLLISION) {
-                crow::json::wvalue responseJson;
-                responseJson["status"] = 0;
-                responseJson["message"] = "Route is very dangerous to be used";
-                return crow::response(200, responseJson);
-            }
         }
+
+        if(collisionsCount > MAX_COLLISION) {
+            crow::json::wvalue responseJson;
+            responseJson["status"] = 0;
+            responseJson["message"] = "Route is very dangerous to be used";
+            return crow::response(200, responseJson);
+        }
+        
 
 
         //Insert drone data and coordinates
