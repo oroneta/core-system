@@ -18,15 +18,9 @@ CREATE TABLE drones (
     owner_name VARCHAR,
     owner_identify VARCHAR,
     owner_email VARCHAR,
-    registered_at TIMESTAMP,
+    registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (registrants) REFERENCES registrants(id)
 );
-
-CREATE OR REPLACE FUNCTION json_array_elements_text(json)
-RETURNS SETOF text AS
-$$
-SELECT json_array_elements($1)::text;
-$$ LANGUAGE sql IMMUTABLE STRICT;
 
 CREATE OR REPLACE FUNCTION json_array_elements_text(json)
 RETURNS SETOF text AS
