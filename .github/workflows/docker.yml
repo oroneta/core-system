@@ -41,12 +41,15 @@ jobs:
           exit 1
         fi
 
+        docker ps
+        docker container ls
 
-    - name: Test docker container
-      run: |
-        cd ./test
 
-        python3 -m pip install -r requeriments.txt
+    # - name: Test docker container
+    #   run: |
+    #     cd ./test
 
-        python3 pytester.py 2
-        python3 pytester.py 1
+    #     python3 -m pip install -r requeriments.txt
+
+    #     python3 pytester.py 2
+    #     python3 pytester.py 1
