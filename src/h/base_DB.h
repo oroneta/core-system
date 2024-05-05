@@ -11,7 +11,7 @@
  * \param user : The username for the databse.
  * \param password : The password for the database.
  * 
- * \return A pointer to the connection object.
+ * \return A pointer to the connection.
  */
 PGconn* DB_connection(const char* user, const char* password);
 
@@ -34,7 +34,7 @@ bool checkDic(PGconn* conn, const char* dic);
 void insertRoute(PGconn* conn, const char* dic, const char* auth_code, const char* route);
 
 /*!
- * \brief Cheks if the authorization code for a drone is valid.
+ * \brief Checks if the authorization code for a drone is valid.
  * \param dic : The drone identifier code.
  * \param authCode : The authentication code to check.
  * 
@@ -44,11 +44,10 @@ bool checkAuthCode(PGconn* conn, const char* dic, const char* authCode);
 
 /*!
  * \brief Checks for collisions on a given route.
- * \param dic : The drone identifier code.
  * \param route : The route to check for collisions. The route should be a string with the format: "[[x0,y0],[x1,y1],...]".
  * 
- * \return The number of potential collisions on the route
+ * \return The number of potential collisions on the route.
  */
-int checkColissions(PGconn* conn, const char* dic, const char* route);
+int checkColissions(PGconn* conn, const char* route);
 
 #endif
