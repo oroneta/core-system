@@ -80,7 +80,7 @@ int main(){
 
 
         //check collisions
-        collisionsCount = checkColissions(conn, dic.c_str(), coordsString.c_str());
+        collisionsCount = checkColissions(conn, coordsString.c_str());
 
         if(collisionsCount > MAX_COLLISION) {
             crow::json::wvalue responseJson;
